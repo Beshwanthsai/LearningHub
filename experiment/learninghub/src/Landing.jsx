@@ -53,21 +53,21 @@ const Landing = () => {
                 <h2>Popular Courses</h2>
                 <div className="course-grid">
                     <div className="course-card">
-                        <img src="/web-dev.jpg" alt="Web Development" />
-                        <h3>Web Development</h3>
+                        <img src="/web-dev.jpg" alt="Full Stack Application Development" />
+                        <h3>Full Stack Application Development</h3>
                         <p>Master modern web technologies</p>
                         <button onClick={handleGetStarted}>Enroll Now</button>
                     </div>
                     <div className="course-card">
-                        <img src="/data-science.jpg" alt="Data Science" />
-                        <h3>Data Science</h3>
+                        <img src="/data-science.jpg" alt="Design Analysis Algorithms" />
+                        <h3>Design Analysis Algorithms</h3>
                         <p>Learn data analytics and ML</p>
                         <button onClick={handleGetStarted}>Enroll Now</button>
                     </div>
                     <div className="course-card">
-                        <img src="/mobile-dev.jpg" alt="Mobile Development" />
-                        <h3>Mobile Development</h3>
-                        <p>Build iOS and Android apps</p>
+                        <img src="/mobile-dev.jpg" alt="Data Structures" />
+                        <h3>Data Structures</h3>
+                        <p>Get expertise in Data Structures</p>
                         <button onClick={handleGetStarted}>Enroll Now</button>
                     </div>
                 </div>
