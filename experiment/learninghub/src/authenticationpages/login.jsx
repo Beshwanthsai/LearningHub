@@ -1,9 +1,14 @@
 import './login.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+export default function Login({ setIsAuthenticated }) {
     const navigate = useNavigate();
 
+    const handleLogin = () => {
+        setIsAuthenticated(true);
+        navigate('/dashboard');
+    };
+    
     return (
         <div className="login-page">
             <nav className="navbar">
