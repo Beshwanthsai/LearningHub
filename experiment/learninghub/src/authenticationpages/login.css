@@ -9,7 +9,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(905deg, #6ac1c5, #bda5ff,hsl(333, 71%, 81%));
+  background: linear-gradient(905deg, #6ac1c5, #bda5ff);
   padding: 20px;
 }
 
@@ -112,6 +112,64 @@
 .signup_tog:hover {
   color: #bda5ff;
 }
+
+/* Add these styles to your existing login.css */
+
+.login-page {
+  min-height: 100vh;
+  /* padding-top: 80px; */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.login-btn {
+  background: #fff;
+  color: #6ac1c5;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
 
 @media (max-width: 480px) {
   .form {
