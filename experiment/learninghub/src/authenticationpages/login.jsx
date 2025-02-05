@@ -15,7 +15,7 @@ export default function Login() {
                     <button className="login-btn" onClick={() => navigate('/')}>Home</button>
                 </div>
             </nav>
-            
+
             <div className="container">
                 <input id="signup_toggle" type="checkbox" />
                 <div className="form">
@@ -32,7 +32,12 @@ export default function Login() {
                     <div className="form_back">
                         <div className="form_details">Sign Up</div>
                         <input type="text" className="input" placeholder="Name" required />
-                        <input type="email" className="input" placeholder="Email" required />
+                        {/* <input type="email" className="input" placeholder="Email" required /> */}
+                        <select className="input" required>
+                            <option value="">Select Role</option>
+                            <option value="student">Student</option>
+                            <option value="instructor">Instructor</option>
+                        </select>
                         <input type="password" className="input" placeholder="Password" required />
                         <button className="btn">Sign Up</button>
                         <span className="switch">

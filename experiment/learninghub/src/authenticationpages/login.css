@@ -170,6 +170,50 @@
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
+select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #6ac1c5 50%), 
+                    linear-gradient(135deg, #6ac1c5 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(1em + 2px),
+                       calc(100% - 15px) calc(1em + 2px);
+  background-size: 5px 5px,
+                  5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+select.input:focus {
+  outline: none;
+  border-color: #643dd1;
+  box-shadow: 0 5px 15px rgba(106, 193, 197, 0.2);
+  transform: translateY(-2px);
+}
+
+select.input option {
+  background: white;
+  color: #d68181;
+  padding: 10px;
+  font-size: 16px;
+}
+
+select.input:hover {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+select.input:required:invalid {
+  color: #757575;
+}
+
+select.input option[value=""][disabled] {
+  display: none;
+}
+
+select.input option:not([value=""]) {
+  color: #404040;
+}
 
 @media (max-width: 480px) {
   .form {
