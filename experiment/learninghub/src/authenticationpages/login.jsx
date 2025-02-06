@@ -25,7 +25,7 @@ export default function Login({ setIsAuthenticated }) {
                 <input id="signup_toggle" type="checkbox" />
                 <div className="form">
                     <div className="form_front">
-                        <div className="form_details"></div>
+                        <div className="form_details">Login</div>
                         <input type="text" className="input" placeholder="Username" required />
                         <input type="password" className="input" placeholder="Password" required />
                         <button className="btn">Login</button>
