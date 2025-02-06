@@ -3,29 +3,79 @@ import './Dashboard.css';
 
 const StudentDashboard = () => {
     return (
-        <div className="dashboard">
-            <aside className="sidebar">
-                <div className="sidebar-header">
-                    <h2>Student Portal</h2>
+        <div className="dashboard-container">
+            <nav className="themed-navbar">
+                <div className="logo">Learning Hub</div>
+                <div className="profile-menu">
+                    <span className="user-name">John Doe</span>
+                    <img className="avatar" src="/avatar.png" alt="Profile" />
                 </div>
-                <nav className="sidebar-nav">
-                    <a href="#" className="nav-item active">
-                        <i className="fas fa-home"></i>Dashboard
-                    </a>
-                    <a href="#" className="nav-item">
-                        <i className="fas fa-book"></i>My Courses
-                    </a>
-                    <a href="#" className="nav-item">
-                        <i className="fas fa-tasks"></i>Assignments
-                    </a>
-                    <a href="#" className="nav-item">
-                        <i className="fas fa-chart-line"></i>Progress
-                    </a>
-                </nav>
-            </aside>
-            <main className="main-content">
-                {/* Content here */}
-            </main>
+            </nav>
+
+            <div className="dashboard-grid">
+                <aside className="sidebar">
+                    <div className="menu-items">
+                        <a className="menu-item active">
+                            <i className="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a className="menu-item">
+                            <i className="fas fa-book"></i>
+                            <span>My Courses</span>
+                        </a>
+                        <a className="menu-item">
+                            <i className="fas fa-certificate"></i>
+                            <span>Certificates</span>
+                        </a>
+                        <a className="menu-item">
+                            <i className="fas fa-chart-line"></i>
+                            <span>Progress</span>
+                        </a>
+                    </div>
+                </aside>
+
+                <main className="main-content">
+                    <div className="stats-container">
+                        <div className="stat-card gradient-card">
+                            <h3>Enrolled Courses</h3>
+                            <p className="stat-number">12</p>
+                        </div>
+                        <div className="stat-card gradient-card">
+                            <h3>Completed</h3>
+                            <p className="stat-number">8</p>
+                        </div>
+                        <div className="stat-card gradient-card">
+                            <h3>Certificates</h3>
+                            <p className="stat-number">5</p>
+                        </div>
+                    </div>
+
+                    <div className="courses-grid">
+                        <div className="course-progress-section">
+                            <h2>Current Progress</h2>
+                            <div className="progress-card">
+                                <h3>Web Development</h3>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{width: '75%'}}></div>
+                                </div>
+                                <p>75% Complete</p>
+                            </div>
+                        </div>
+
+                        <div className="recommended-courses">
+                            <h2>Recommended For You</h2>
+                            <div className="course-cards">
+                                <div className="course-card">
+                                    <div className="course-image"></div>
+                                    <h3>Advanced JavaScript</h3>
+                                    <p>Master modern JavaScript</p>
+                                    <button className="themed-button">Enroll Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
         </div>
     );
 };
