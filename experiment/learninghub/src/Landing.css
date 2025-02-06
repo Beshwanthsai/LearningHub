@@ -36,7 +36,7 @@
 .logo {
     font-size: 2rem;
     font-weight: bold;
-    color: #0e678e;
+    color: #016f9f;
 }
 
 .nav-links {
@@ -53,23 +53,24 @@
 }
 
 .nav-links a:hover {
-    color: #23500a;
+    color: #3ea4e0;
 }
-
 .login-btn {
-    background: linear-gradient(135deg, #6ac1c5, #bda5ff);
-    color: #fcfdfd;
-    border: none;
+    background: transparent;
+    color: #fff;
+    border: 2px solid #090707;
     padding: 0.8rem 2rem;
     border-radius: 30px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 1s ease;
 }
 
 .login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background: #fff;
+    color: #6ac1c5;
+    transform: translateY(-92px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
 }
 
 .hero {
@@ -83,7 +84,7 @@
 }
 
 .hero-content {
-    color: #fff;
+    color: #fffffe;
     max-width: 800px;
 }
 
@@ -201,7 +202,7 @@
     padding: 0.8rem 2rem;
     border: none;
     background: linear-gradient(135deg, #6ac1c5, #bda5ff);
-    color: #fff;
+    color: #fffefe;
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -216,7 +217,7 @@
     padding: 5rem 5%;
     text-align: center;
     background: linear-gradient(135deg, #6ac1c5, #bda5ff);
-    color: #fff;
+    color: #faf6f6;
 }
 
 .cta h2 {

@@ -17,7 +17,7 @@ export default function Login({ setIsAuthenticated }) {
                     <a href="#courses">Courses</a>
                     <a href="#about">About</a>
                     <a href="#contact">Contact</a>
-                    <button className="login-btn" onClick={() => navigate('/')}>Home</button>
+                    <button className="login-btn" onClick={() => navigate('/')}><b><i>Home</i></b></button>
                 </div>
             </nav>
 
@@ -37,7 +37,7 @@ export default function Login({ setIsAuthenticated }) {
                     <div className="form_back">
                         <div className="form_details">Sign Up</div>
                         <input type="text" className="input" placeholder="Name" required />
-                        {/* <input type="email" className="input" placeholder="Email" required /> */}
+                        <input type="email" className="input" placeholder="Email" required />
                         <select className="input" required>
                             <option value="">Select Role</option>
                             <option value="student">Student</option>

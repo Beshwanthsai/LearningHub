@@ -17,7 +17,7 @@ const Landing = () => {
                         <a href="#courses">Courses</a>
                         <a href="#about">About</a>
                         <a href="#contact">Contact</a>
-                        <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
+                        <button className="login-btn" onClick={() => navigate('/login')}><b><i>Login</i></b></button>
                     </div>
                 </nav>
                 <div className="hero-content">
