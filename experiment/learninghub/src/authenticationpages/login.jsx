@@ -70,13 +70,18 @@ export default function Login({ setIsAuthenticated }) {
             return;
         }
 
+        console.log('Attempting login...'); // Debug log
+
         axios.post("http://localhost:8083/verifyUser", 
             { username, password },
             { headers: { "Content-Type": "application/json" } }
         )
         .then((response) => {
+            console.log('Server response:', response.data); // Debug log
+            
             if (response.data.auth) {
                 setIsAuthenticated(true);
+                
                 toast.success('Login successful!', {
                     position: "top-right",
                     theme: "colored",
@@ -86,11 +91,15 @@ export default function Login({ setIsAuthenticated }) {
                     }
                 });
 
-                if (response.data.role === 1) {
-                    setTimeout(() => navigate('/student-dashboard'), 1500);
-                } else if (response.data.role === 2) {
-                    setTimeout(() => navigate('/instructor-dashboard'), 1500);
-                }
+                // Role-based navigation
+                setTimeout(() => {
+                    console.log('Redirecting with role:', response.data.role); // Debug log
+                    if (response.data.role === 1) {
+                        navigate('/student-dashboard');
+                    } else if (response.data.role === 2) {
+                        navigate('/instructor-dashboard');
+                    }
+                }, 1500);
             } else {
                 toast.error('Invalid credentials', {
                     position: "top-right",
@@ -103,6 +112,7 @@ export default function Login({ setIsAuthenticated }) {
             }
         })
         .catch((error) => {
+            console.error('Login error:', error); // Debug log
             toast.error('Login failed', {
                 position: "top-right",
                 theme: "colored",
