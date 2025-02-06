@@ -50,6 +50,40 @@ export default function Login({ setIsAuthenticated }) {
                 error.response ? error.response.data : "Registration failed.";
         });
     }
+
+    function login() {
+        // Get the username and password from input fields
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("pass1").value;
+    
+        // Ensure that both fields are filled
+        if (!username || !password) {
+            console.error("Both username and password are required.");
+            document.getElementById("result").innerHTML = "Please fill in both fields.";
+            return;
+        }
+    
+        // Log data for debugging
+        console.log("Sending data:", { username, password });
+    
+        // Send login data to Spring Boot backend
+        axios.post("http://localhost:8083/verifyUser", 
+            { username, password },
+            { headers: { "Content-Type": "application/json" } }  // Ensure JSON format
+        )
+        .then((response) => {
+            // Handle successful login response
+            console.log("Response:", response.data.auth);
+            document.getElementById("result").innerHTML = response.data.auth;
+        })
+        .catch((error) => {
+            // Handle error (e.g., incorrect credentials)
+            console.error("Error:", error.response ? error.response.data : error);
+            document.getElementById("result").innerHTML = 
+                error.response ? error.response.data : "Login failed.";
+        });
+    }
+    
     
     
     
@@ -71,14 +105,16 @@ export default function Login({ setIsAuthenticated }) {
                 <div className="form">
                     <div className="form_front">
                         <div className="form_details">Login</div>
-                        <input type="text" className="input" placeholder="Username" required />
-                        <input type="password" className="input" placeholder="Password" required />
-                        <button className="btn">Login</button>
+                        <input type="text" className="input" id="username" placeholder="Username" required />
+                        <input type="password" className="input" id="pass1" placeholder="Password" required />
+                        <button className="btn" onClick={login}>Login</button>
                         <span className="switch">
                             Don't have an account?
                             <label htmlFor="signup_toggle" className="signup_tog">Sign Up</label>
                         </span>
+                        <div id="result"></div>
                     </div>
+
                     <div className="form_back">
                         <div className="form_details">Sign Up</div>
                         <input type="text" className="input" placeholder="Name" id="un" required />
