@@ -70,15 +70,11 @@ export default function Login({ setIsAuthenticated }) {
             return;
         }
 
-        console.log('Attempting login...'); // Debug log
-
         axios.post("http://localhost:8083/verifyUser", 
             { username, password },
             { headers: { "Content-Type": "application/json" } }
         )
         .then((response) => {
-            console.log('Server response:', response.data); // Debug log
-            
             if (response.data.auth) {
                 setIsAuthenticated(true);
                 
@@ -91,9 +87,7 @@ export default function Login({ setIsAuthenticated }) {
                     }
                 });
 
-                // Role-based navigation
                 setTimeout(() => {
-                    console.log('Redirecting with role:', response.data.role); // Debug log
                     if (response.data.role === 1) {
                         navigate('/student-dashboard');
                     } else if (response.data.role === 2) {
@@ -112,7 +106,6 @@ export default function Login({ setIsAuthenticated }) {
             }
         })
         .catch((error) => {
-            console.error('Login error:', error); // Debug log
             toast.error('Login failed', {
                 position: "top-right",
                 theme: "colored",
@@ -145,6 +138,9 @@ export default function Login({ setIsAuthenticated }) {
                         <input type="text" className="input" id="username" placeholder="Username" required />
                         <input type="password" className="input" id="pass1" placeholder="Password" required />
                         <button className="btn" onClick={login}>Login</button>
+                        <div className="forgot-password">
+                            <span onClick={() => navigate('/forgot-password')}>Forgot Password?</span>
+                        </div>
                         <span className="switch">
                             Don't have an account?
                             <label htmlFor="signup_toggle" className="signup_tog">Sign Up</label>
