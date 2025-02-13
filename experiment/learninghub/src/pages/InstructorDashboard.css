@@ -1,10 +1,13 @@
 :root {
-    --primary-color: #FF6B6B;
-    --secondary-color: #4ECDC4;
-    --dark-color: #2C3E50;
-    --light-color: #F7F9FC;
-    --gray-color: #95A5A6;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --primary-color: #7046D4;
+    --secondary-color: #5F35D4;
+    --accent-color: #F5BA4C;
+    --dark-color: #1A1A1A;
+    --light-color: #F8F9FA;
+    --gray-color: #6C757D;
+    --success-color: #28A745;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 2px 8px rgba(112, 70, 212, 0.1);
     --transition: all 0.3s ease;
   }
   
@@ -17,17 +20,18 @@
   .dashboard-header {
     background: white;
     padding: 1.5rem 2rem;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    border: 1px solid rgba(112, 70, 212, 0.1);
   }
   
   .dashboard-header h1 {
-    color: var(--dark-color);
-    font-size: 2rem;
+    color: var(--primary-color);
+    font-size: 1.8rem;
     font-weight: 600;
   }
   
@@ -39,11 +43,11 @@
   
   .welcome-text {
     color: var(--gray-color);
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   .profile-icon i {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     color: var(--primary-color);
     cursor: pointer;
     transition: var(--transition);
@@ -59,25 +63,26 @@
   .stat-card {
     background: white;
     padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
     display: flex;
     align-items: center;
     gap: 1.5rem;
     transition: var(--transition);
+    border: 1px solid rgba(112, 70, 212, 0.1);
   }
   
   .stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(112, 70, 212, 0.15);
   }
   
   .stat-card i {
-    font-size: 2rem;
+    font-size: 1.8rem;
     padding: 1rem;
-    border-radius: 12px;
+    border-radius: 10px;
     color: var(--primary-color);
-    background: rgba(255, 107, 107, 0.1);
+    background: rgba(112, 70, 212, 0.1);
   }
   
   .stat-info h3 {
@@ -88,29 +93,30 @@
   
   .stat-info p {
     color: var(--dark-color);
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 600;
     margin: 0;
   }
   
   .content-section {
     background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
+    padding: 1.8rem;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
     margin-bottom: 2rem;
+    border: 1px solid rgba(112, 70, 212, 0.1);
   }
   
   .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.8rem;
   }
   
   .section-header h2 {
-    color: var(--dark-color);
-    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-size: 1.4rem;
     font-weight: 600;
   }
   
@@ -118,7 +124,7 @@
     background: var(--primary-color);
     color: white;
     border: none;
-    padding: 0.8rem 1.5rem;
+    padding: 0.7rem 1.4rem;
     border-radius: 8px;
     font-weight: 500;
     cursor: pointer;
@@ -126,25 +132,27 @@
   }
   
   .view-all-btn:hover {
-    background: #ff5252;
+    background: var(--secondary-color);
     transform: translateY(-2px);
   }
   
   .courses-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
   }
   
   .course-card {
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: var(--shadow);
+    box-shadow: var(--card-shadow);
     transition: var(--transition);
+    border: 1px solid rgba(112, 70, 212, 0.1);
   }
   
   .course-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(112, 70, 212, 0.15);
   }
   
   .course-image {
@@ -158,22 +166,23 @@
   
   .course-info h3 {
     color: var(--dark-color);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
   }
   
   .progress-bar {
-    height: 8px;
-    background: #eee;
-    border-radius: 4px;
+    height: 6px;
+    background: rgba(112, 70, 212, 0.1);
+    border-radius: 3px;
     overflow: hidden;
     margin-top: 1rem;
   }
   
   .progress {
     height: 100%;
-    background: var(--secondary-color);
-    border-radius: 4px;
+    background: var(--success-color);
+    border-radius: 3px;
   }
   
   .activities-list {
@@ -188,37 +197,40 @@
     gap: 1rem;
     padding: 1rem;
     border-radius: 10px;
-    background: rgba(247, 249, 252, 0.8);
+    background: rgba(112, 70, 212, 0.03);
     transition: var(--transition);
+    border: 1px solid rgba(112, 70, 212, 0.1);
   }
   
   .activity-item:hover {
-    background: rgba(247, 249, 252, 1);
+    background: rgba(112, 70, 212, 0.05);
     transform: translateX(5px);
   }
   
   .activity-icon i {
     color: var(--primary-color);
-    background: rgba(255, 107, 107, 0.1);
+    background: rgba(112, 70, 212, 0.1);
     padding: 0.8rem;
     border-radius: 8px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   
   .activity-info h4 {
     color: var(--dark-color);
     margin-bottom: 0.3rem;
+    font-weight: 600;
   }
   
   .activity-info p {
     color: var(--gray-color);
     margin: 0;
+    font-size: 0.9rem;
   }
   
   .activity-time {
     color: var(--gray-color);
     font-size: 0.8rem;
-    margin-top: 0.5rem;
+    margin-top: 0.4rem;
     display: block;
   }
   
@@ -231,7 +243,7 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 1rem;
-      padding: 1rem;
+      padding: 1.2rem;
     }
   
     .dashboard-stats {
@@ -243,7 +255,7 @@
     }
   
     .content-section {
-      padding: 1rem;
+      padding: 1.2rem;
     }
   
     .section-header {
@@ -253,5 +265,20 @@
   
     .view-all-btn {
       width: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .stat-card {
+      padding: 1.2rem;
+    }
+  
+    .stat-card i {
+      padding: 0.8rem;
+      font-size: 1.5rem;
+    }
+  
+    .stat-info p {
+      font-size: 1.4rem;
     }
   }
