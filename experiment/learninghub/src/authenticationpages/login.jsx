@@ -97,22 +97,14 @@ export default function Login({ setIsAuthenticated }) {
             } else {
                 toast.error('Invalid credentials', {
                     position: "top-right",
-                    theme: "colored",
-                    style: {
-                        background: 'linear-gradient(to right, #ff6b6b, #ff8787)',
-                        borderRadius: '10px'
-                    }
+                    theme: "colored"
                 });
             }
         })
         .catch((error) => {
             toast.error('Login failed', {
                 position: "top-right",
-                theme: "colored",
-                style: {
-                    background: 'linear-gradient(to right, #ff6b6b, #ff8787)',
-                    borderRadius: '10px'
-                }
+                theme: "colored"
             });
         });
     }
