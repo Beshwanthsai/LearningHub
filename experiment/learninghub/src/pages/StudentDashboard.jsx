@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 
 const StudentDashboard = () => {
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user && user.username) {
+                setUsername(user.username);
+            } else {
+                setUsername('Guest User'); 
+            }
+        } catch (error) {
+            console.error('Error parsing user data:', error);
+            setUsername('Guest User');
+        }
+    }, []);
+
     return (
         <div className="dashboard-container">
             <nav className="themed-navbar">
                 <div className="logo">Learning Hub</div>
                 <div className="profile-menu">
-                    <span className="user-name">John Doe</span>
+                    <span className="user-name">{username}</span>
                     <img className="avatar" src="/avatar.png" alt="Profile" />
                 </div>
             </nav>

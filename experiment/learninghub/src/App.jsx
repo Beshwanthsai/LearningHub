@@ -5,7 +5,7 @@ import Login from './authenticationpages/login';
 import StudentDashboard from './pages/StudentDashboard';
 import InstructorDashboard from './pages/InstructorDashboard';
 import ForgotPassword from './authenticationpages/ForgotPassword';
-import './App.css';
+
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);

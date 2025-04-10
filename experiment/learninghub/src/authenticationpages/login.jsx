@@ -32,6 +32,8 @@ export default function Login({ setIsAuthenticated }) {
             { headers: { "Content-Type": "application/json" } }
         )
         .then((res) => {
+            // Store user data after successful registration
+            localStorage.setItem('user', JSON.stringify({ username: username }));
             toast.success('Registration successful!', {
                 position: "top-right",
                 theme: "colored",
@@ -77,6 +79,8 @@ export default function Login({ setIsAuthenticated }) {
         .then((response) => {
             if (response.data.auth) {
                 setIsAuthenticated(true);
+                // Store user data after successful login
+                localStorage.setItem('user', JSON.stringify({ username: username }));
                 
                 toast.success('Login successful!', {
                     position: "top-right",
