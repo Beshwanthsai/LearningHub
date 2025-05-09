@@ -32,7 +32,7 @@ export default function Login({ setIsAuthenticated }) {
             { headers: { "Content-Type": "application/json" } }
         )
         .then((res) => {
-            // Store user data after successful registration
+            
             localStorage.setItem('user', JSON.stringify({ username: username }));
             toast.success('Registration successful!', {
                 position: "top-right",
