@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-
+import MyCourses from './MyCourses';
+import axios from 'axios';
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Pie, Bar } from 'react-chartjs-2';
 import './Dashboard.css';
 
-// Add additional inline styles for the stats container
+
 const statsContainerStyle = {
     display: 'flex',
     justifyContent: 'space-between',
@@ -29,7 +29,7 @@ const statValueStyle = {
     margin: '10px 0',
 };
 
-// Register Chart.js components for the stats container
+// Register Chart.js components for the stats containeer
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const StudentDashboard = () => {
@@ -44,9 +44,9 @@ const StudentDashboard = () => {
     const [userAnswers, setUserAnswers] = useState({});
     const [completedModules, setCompletedModules] = useState({});
     const [certificates, setCertificates] = useState([]);
-    const [viewingModules, setViewingModules] = useState(null); // New state for viewing modules
+    const [viewingModules, setViewingModules] = useState(null);
 
-    // Mock data for courses and resources
+
     const coursesData = [
         {
             id: 1,
@@ -256,6 +256,18 @@ const StudentDashboard = () => {
 
         // Set certificates
         setCertificates(certificatesData);
+
+        // Fetch all courses from the API
+        const fetchCourses = async () => {
+            try {
+                const response = await axios.get('http://localhost:8083/courses');
+                setCourses(response.data || []);
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+            }
+        };
+
+        fetchCourses();
     }, []);
 
     // Handle quiz submission
@@ -376,21 +388,15 @@ const StudentDashboard = () => {
 
     // Render dashboard section
     const renderDashboard = () => {
-        const { pieData, barData } = prepareChartData();
-        const enrolledCoursesData = courses.filter(course => enrolledCourses.includes(course.id));
-        const notEnrolledCoursesData = courses.filter(course => !enrolledCourses.includes(course.id));
-        
         return (
-            <div className="dashboard-content">
-                <h2 className="section-title">Learning Dashboard</h2>
+            <div className="dashboard-content styled-section">
+                <h2 className="section-title styled-title">Learning Dashboard</h2>
                 
                 {/* Stats overview */}
-                <div style={statsContainerStyle} className="stats-container">
+                {/* <div style={statsContainerStyle} className="stats-container">
                     <div 
                         style={statCardStyle} 
                         className="stat-card"
-                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
                         <h3>Enrolled Courses</h3>
                         <p style={statValueStyle} className="stat-value">{enrolledCourses.length}</p>
@@ -398,8 +404,6 @@ const StudentDashboard = () => {
                     <div 
                         style={statCardStyle} 
                         className="stat-card"
-                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
                         <h3>Completed Courses</h3>
                         <p style={statValueStyle} className="stat-value">
@@ -409,124 +413,11 @@ const StudentDashboard = () => {
                     <div 
                         style={statCardStyle} 
                         className="stat-card"
-                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
                         <h3>Certificates Earned</h3>
                         <p style={statValueStyle} className="stat-value">{certificates.length}</p>
                     </div>
-                </div>
-                
-                {/* Render modules view if a course is selected for viewing modules */}
-                {viewingModules ? (
-                    renderModulesView(viewingModules)
-                ) : (
-                    <>
-                        {/* Progress visualization */}
-                        <div className="progress-visualization">
-                            <div className="chart-container">
-                                <h3>Course Status</h3>
-                                <div className="chart-wrapper">
-                                    <Pie data={pieData} options={{ maintainAspectRatio: false }} />
-                                </div>
-                            </div>
-                            <div className="chart-container wide">
-                                <h3>Course Progress</h3>
-                                <div className="chart-wrapper">
-                                    <Bar 
-                                        data={barData} 
-                                        options={{
-                                            scales: {
-                                                y: {
-                                                    beginAtZero: true,
-                                                    max: 100
-                                                }
-                                            },
-                                            maintainAspectRatio: false
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        
-                        {/* Enrolled courses section */}
-                        <div className="enrolled-courses-section">
-                            <h3>My Enrolled Courses</h3>
-                            <div className="courses-grid">
-                                {enrolledCoursesData.map(course => (
-                                    <div key={course.id} className="course-card">
-                                        <div className="course-image">
-                                            <img src={course.image} alt={course.title} />
-                                        </div>
-                                        <div className="course-info">
-                                            <h4>{course.title}</h4>
-                                            <div className="progress-container">
-                                                <div className="progress-bar">
-                                                    <div className="progress-fill" style={{width: `${course.progress}%`}}></div>
-                                                </div>
-                                                <span className="progress-text">{course.progress}% complete</span>
-                                            </div>
-                                            <div className="course-buttons">
-                                                <button 
-                                                    className="continue-button"
-                                                    onClick={() => {
-                                                        setSelectedCourse(course);
-                                                        setActiveSection('course-detail');
-                                                    }}
-                                                >
-                                                    Continue
-                                                </button>
-                                                <button 
-                                                    className="view-modules-button"
-                                                    onClick={() => setViewingModules(course)}
-                                                >
-                                                    View Modules
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        
-                        {/* Available courses not yet enrolled */}
-                        <div className="available-courses">
-                            <h3>Available Courses</h3>
-                            <div className="courses-grid">
-                                {notEnrolledCoursesData.map(course => (
-                                    <div key={course.id} className="course-card recommended">
-                                        <div className="course-image">
-                                            <img src={course.image} alt={course.title} />
-                                            {course.recommended && <span className="recommended-badge">Recommended</span>}
-                                        </div>
-                                        <div className="course-info">
-                                            <h4>{course.title}</h4>
-                                            <p>{course.description}</p>
-                                            <p className="instructor">By {course.instructor}</p>
-                                            <div className="course-buttons">
-                                                <button 
-                                                    className="enroll-button"
-                                                    onClick={() => {
-                                                        setSelectedCourse(course);
-                                                        setActiveSection('course-detail');
-                                                    }}
-                                                >
-                                                    Enroll Now
-                                                </button>
-                                                <button 
-                                                    className="view-modules-button"
-                                                    onClick={() => setViewingModules(course)}
-                                                >
-                                                    Preview
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </>
-                )}
+                </div> */}
             </div>
         );
     };
@@ -650,6 +541,70 @@ const StudentDashboard = () => {
                             </div>
                         </div>
                     ))}
+                </div>
+            </div>
+        );
+    };
+
+    // Render all courses section
+    const renderAllCourses = () => {
+        const handleEnroll = async (course) => {
+            const payload = {
+                username, // User's username
+                courseHead: course.title, // Course title as courseHead
+                courseId: course.id, // Course ID
+                percentage: 0, // Default percentage for new enrollment
+            };
+
+            try {
+                const response = await axios.post(`http://localhost:8083/student-course`, payload);
+                alert(response.data || 'Enrolled successfully!');
+            } catch (error) {
+                console.error('Error enrolling in course:', error);
+                alert('Failed to enroll in the course. Please try again.');
+            }
+        };
+
+        return (
+            <div className="all-courses-content styled-section">
+                <h2 className="section-title styled-title">All Courses</h2>
+                <div className="courses-grid styled-grid">
+                    {courses.length > 0 ? (
+                        courses.map(course => (
+                            <div key={course.id} className="course-card styled-card">
+                                <div className="course-info styled-info">
+                                    <table className="course-details-table styled-table">
+                                        <tbody>
+                                            <tr>
+                                                <th className="styled-th">Course ID:</th>
+                                                <td className="styled-td">{course.id}</td>
+                                            </tr>
+                                            <tr>
+                                                <th className="styled-th">Username:</th>
+                                                <td className="styled-td">{username}</td>
+                                            </tr>
+                                            <tr>
+                                                <th className="styled-th">Title:</th>
+                                                <td className="styled-td">{course.title}</td>
+                                            </tr>
+                                            <tr>
+                                                <th className="styled-th">Description:</th>
+                                                <td className="styled-td">{course.description}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button 
+                                        className="enroll-course-button styled-button"
+                                        onClick={() => handleEnroll(course)}
+                                    >
+                                        Enroll
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="no-courses-message styled-message">No courses available at the moment.</p>
+                    )}
                 </div>
             </div>
         );
@@ -848,76 +803,6 @@ const StudentDashboard = () => {
         );
     };
 
-    // Render resources section
-    const renderResources = () => {
-        // Group resources by course
-        const resourcesByCourse = courses
-            .filter(course => enrolledCourses.includes(course.id))
-            .map(course => {
-                const courseResources = [];
-                course.modules?.forEach(module => {
-                    if (module.resources) {
-                        courseResources.push(...module.resources.map(resource => ({
-                            ...resource,
-                            moduleTitle: module.title,
-                            courseTitle: course.title
-                        })));
-                    }
-                });
-                
-                return {
-                    courseId: course.id,
-                    courseTitle: course.title,
-                    resources: courseResources
-                };
-            })
-            .filter(item => item.resources.length > 0);
-            
-        return (
-            <div className="resources-content">
-                <h2 className="section-title">Learning Resources</h2>
-                
-                {resourcesByCourse.length === 0 ? (
-                    <div className="no-resources">
-                        <p>No resources available for your enrolled courses.</p>
-                    </div>
-                ) : (
-                    resourcesByCourse.map(courseResources => (
-                        <div key={courseResources.courseId} className="course-resources">
-                            <h3>{courseResources.courseTitle}</h3>
-                            <div className="resources-table">
-                                <div className="table-header">
-                                    <div className="col-type">Type</div>
-                                    <div className="col-title">Title</div>
-                                    <div className="col-module">Module</div>
-                                    <div className="col-actions">Actions</div>
-                                </div>
-                                {courseResources.resources.map(resource => (
-                                    <div key={resource.id} className="resource-row">
-                                        <div className="col-type">
-                                            {resource.type === 'pdf' && <i className="fas fa-file-pdf"></i>}
-                                            {resource.type === 'video' && <i className="fas fa-video"></i>}
-                                            {resource.type === 'document' && <i className="fas fa-file-alt"></i>}
-                                            {resource.type}
-                                        </div>
-                                        <div className="col-title">{resource.title}</div>
-                                        <div className="col-module">{resource.moduleTitle}</div>
-                                        <div className="col-actions">
-                                            <button className="view-resource">View</button>
-                                            <button className="download-resource">
-                                                <i className="fas fa-download"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))
-                )}
-            </div>
-        );
-    };
-
     return (
         <div className="dashboard-container">
             {/* Navigation Bar */}
@@ -963,25 +848,18 @@ const StudentDashboard = () => {
                             <span>Dashboard</span>
                         </li>
                         <li 
-                            className={`menu-item ${activeSection === 'courses' ? 'active' : ''}`}
-                            onClick={() => setActiveSection('courses')}
+                            className={`menu-item ${activeSection === 'my-courses' ? 'active' : ''}`}
+                            onClick={() => setActiveSection('my-courses')}
                         >
                             <i className="fas fa-book"></i>
                             <span>My Courses</span>
                         </li>
                         <li 
-                            className={`menu-item ${activeSection === 'certificates' ? 'active' : ''}`}
-                            onClick={() => setActiveSection('certificates')}
+                            className={`menu-item ${activeSection === 'all-courses' ? 'active' : ''}`}
+                            onClick={() => setActiveSection('all-courses')}
                         >
-                            <i className="fas fa-certificate"></i>
-                            <span>Certificates</span>
-                        </li>
-                        <li 
-                            className={`menu-item ${activeSection === 'resources' ? 'active' : ''}`}
-                            onClick={() => setActiveSection('resources')}
-                        >
-                            <i className="fas fa-file-alt"></i>
-                            <span>Resources</span>
+                            <i className="fas fa-th-list"></i>
+                            <span>All Courses</span>
                         </li>
                     </ul>
                 </aside>
@@ -989,11 +867,10 @@ const StudentDashboard = () => {
                 {/* Main Content Area */}
                 <main className="dashboard-main">
                     {activeSection === 'dashboard' && renderDashboard()}
-                    {activeSection === 'courses' && renderCourses()}
+                    {activeSection === 'my-courses' && <MyCourses />}
+                    {activeSection === 'all-courses' && renderAllCourses()}
                     {activeSection === 'course-detail' && renderCourseDetail()}
                     {activeSection === 'quiz' && renderQuiz()}
-                    {activeSection === 'resources' && renderResources()}
-                    {activeSection === 'certificates' && renderCertificates()}
                 </main>
             </div>
         </div>

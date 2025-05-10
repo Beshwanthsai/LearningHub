@@ -1,0 +1,174 @@
+/* Basic styles for the Add Course page */
+:root {
+    --primary-color: #6ac1c5;
+    --secondary-color: #166fec;
+    --gradient: linear-gradient(135deg, #6ac1c5, #bda5ff);
+    --hover-shadow: 0 4px 15px rgba(106, 193, 197, 0.4);
+}
+
+.instructor-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--gradient);
+    padding: 10px 20px;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-logo span {
+    color: #f6f9fa;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-item {
+    color: rgb(240, 245, 247);
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-item.active {
+    font-weight: bold;
+    border-bottom: 2px solid rgb(96, 211, 243);
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-logout {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-logout:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.dashboard-container {
+    padding: 20px;
+    color:  #bda5ff;
+    min-height: 100vh;
+
+}
+
+.content-section {
+    background-color: rgb(247, 241, 241);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+.styled-title{
+    font-size: 28px;
+    font-weight: 700;
+    color:  #6ac1c5;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.add-course-container {
+    margin-top: 90px;
+    color: linear-gradient(135deg, #6ac1c5, #bda5ff);
+    padding: 20px;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color:linear-gradient(135deg, #6ac1c5, #bda5ff) ;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(106, 193, 197, 0.2);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn-primary {
+    background: var(--gradient);
+    color: rgb(103, 215, 249);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(106, 193, 197, 0.1);
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+}

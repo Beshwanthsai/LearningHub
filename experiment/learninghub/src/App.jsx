@@ -2,9 +2,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useState } from 'react';
 import Landing from './Landing';
 import Login from './authenticationpages/login';
-import StudentDashboard from './pages/StudentDashboard';
-import InstructorDashboard from './pages/InstructorDashboard';
+import StudentDashboard from './pages/student/StudentDashboard';
+import InstructorDashboard from './pages/instructor/InstructorDashboard';
 import ForgotPassword from './authenticationpages/ForgotPassword';
+// Import the new pages
+import InsAddCourse from './pages/instructor/InsAddCourse';
+import InsAddCourseContent from './pages/instructor/InsAddCourseContent';
+import StudentCourseContent from './pages/student/StudentCourseContent';
 
 
 function App() {
@@ -26,6 +30,7 @@ function App() {
                     path="/login" 
                     element={<Login setIsAuthenticated={setIsAuthenticated} />} 
                 />
+                <Route path="/course-content-view" element={<StudentCourseContent />} />
                 <Route 
                     path="/forgot-password" 
                     element={<ForgotPassword />} 
@@ -45,6 +50,23 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <InstructorDashboard />
+                        </ProtectedRoute>
+                    } 
+                />
+                {/* New Instructor Routes */}
+                <Route 
+                    path="/InsAddCourse" 
+                    element={
+                        <ProtectedRoute>
+                            <InsAddCourse />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/InsAddCourseContent" 
+                    element={
+                        <ProtectedRoute>
+                            <InsAddCourseContent />
                         </ProtectedRoute>
                     } 
                 />
