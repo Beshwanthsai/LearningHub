@@ -4,7 +4,32 @@ import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, T
 import { Pie, Bar } from 'react-chartjs-2';
 import './Dashboard.css';
 
-// Register Chart.js components
+// Add additional inline styles for the stats container
+const statsContainerStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    margin: '20px 0',
+    gap: '20px',
+};
+
+const statCardStyle = {
+    flex: 1,
+    background: 'linear-gradient(135deg, #3f51b5, #5c6bc0)',
+    color: 'white',
+    borderRadius: '8px',
+    padding: '20px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
+    transition: 'transform 0.3s ease',
+};
+
+const statValueStyle = {
+    fontSize: '2.5rem',
+    fontWeight: 'bold',
+    margin: '10px 0',
+};
+
+// Register Chart.js components for the stats container
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const StudentDashboard = () => {
@@ -20,7 +45,7 @@ const StudentDashboard = () => {
     const [completedModules, setCompletedModules] = useState({});
     const [certificates, setCertificates] = useState([]);
     const [viewingModules, setViewingModules] = useState(null); // New state for viewing modules
-    
+
     // Mock data for courses and resources
     const coursesData = [
         {
@@ -195,7 +220,7 @@ const StudentDashboard = () => {
             recommended: true
         }
     ];
-    
+
     // Completed certificates
     const certificatesData = [
         {
@@ -214,7 +239,7 @@ const StudentDashboard = () => {
             if (user && user.username) {
                 setUsername(user.username);
             } else {
-                setUsername('Guest User'); 
+                setUsername('Guest User');
             }
         } catch (error) {
             console.error('Error parsing user data:', error);
@@ -224,11 +249,11 @@ const StudentDashboard = () => {
         // Initialize courses and enrolled courses
         setCourses(coursesData);
         setEnrolledCourses([1, 2, 3]); // Mock enrolled course IDs
-        
+
         // Load completed modules from local storage
         const savedCompletedModules = JSON.parse(localStorage.getItem('completedModules') || '{}');
         setCompletedModules(savedCompletedModules);
-        
+
         // Set certificates
         setCertificates(certificatesData);
     }, []);
@@ -236,7 +261,7 @@ const StudentDashboard = () => {
     // Handle quiz submission
     const handleQuizSubmit = () => {
         if (!currentQuiz) return;
-        
+
         // Calculate score
         let correctCount = 0;
         currentQuiz.questions.forEach(question => {
@@ -244,10 +269,10 @@ const StudentDashboard = () => {
                 correctCount++;
             }
         });
-        
+
         const score = Math.round((correctCount / currentQuiz.questions.length) * 100);
         const passed = score >= 70; // Pass threshold
-        
+
         // Set quiz result
         setQuizResult({
             score,
@@ -255,7 +280,7 @@ const StudentDashboard = () => {
             total: currentQuiz.questions.length,
             correct: correctCount
         });
-        
+
         // If passed, mark module as completed
         if (passed && selectedModule && selectedCourse) {
             const moduleKey = `${selectedCourse.id}-${selectedModule.id}`;
@@ -264,40 +289,38 @@ const StudentDashboard = () => {
                 [moduleKey]: true
             };
             setCompletedModules(updatedCompletedModules);
-            
+
             // Save to localStorage
             localStorage.setItem('completedModules', JSON.stringify(updatedCompletedModules));
-            
+
             // Update course progress
             updateCourseProgress(selectedCourse.id);
         }
     };
-    
+
     // Update course progress
     const updateCourseProgress = (courseId) => {
         const course = courses.find(c => c.id === courseId);
         if (!course || !course.modules) return;
-        
+
         // Calculate progress percentage
         const totalModules = course.modules.length;
         let completedCount = 0;
-        
         course.modules.forEach(module => {
             if (completedModules[`${courseId}-${module.id}`]) {
                 completedCount++;
             }
         });
-        
+
         const newProgress = Math.round((completedCount / totalModules) * 100);
         
         // Update courses state
         const updatedCourses = courses.map(c => 
             c.id === courseId ? { ...c, progress: newProgress } : c
         );
-        
         setCourses(updatedCourses);
     };
-    
+
     // Handle answer selection
     const handleAnswerSelect = (questionId, optionIndex) => {
         setUserAnswers({
@@ -305,7 +328,7 @@ const StudentDashboard = () => {
             [questionId]: optionIndex
         });
     };
-    
+
     // Start a quiz
     const startQuiz = (course, module) => {
         setSelectedCourse(course);
@@ -315,26 +338,27 @@ const StudentDashboard = () => {
         setQuizResult(null);
         setActiveSection('quiz');
     };
-    
+
     // Prepare chart data for progress visualization
     const prepareChartData = () => {
-        // For pie chart
+        // For pie chart - showing actual enrollment status
         const pieData = {
-            labels: ['Completed', 'In Progress', 'Not Started'],
+            labels: ['Completed', 'In Progress', 'Not Started', 'Not Enrolled'],
             datasets: [
                 {
                     data: [
-                        courses.filter(c => c.progress === 100).length,
-                        courses.filter(c => c.progress > 0 && c.progress < 100).length,
-                        courses.filter(c => c.progress === 0).length
+                        courses.filter(c => enrolledCourses.includes(c.id) && c.progress === 100).length,
+                        courses.filter(c => enrolledCourses.includes(c.id) && c.progress > 0 && c.progress < 100).length,
+                        courses.filter(c => enrolledCourses.includes(c.id) && c.progress === 0).length,
+                        courses.filter(c => !enrolledCourses.includes(c.id)).length
                     ],
-                    backgroundColor: ['#4CAF50', '#FFC107', '#E0E0E0'],
+                    backgroundColor: ['#4CAF50', '#FFC107', '#E0E0E0', '#BBBBBB'],
                     borderWidth: 0
                 }
             ]
         };
         
-        // For bar chart (course progress)
+        // For bar chart (enrolled course progress)
         const barData = {
             labels: courses.filter(c => enrolledCourses.includes(c.id)).map(c => c.title),
             datasets: [
@@ -342,42 +366,54 @@ const StudentDashboard = () => {
                     label: 'Course Progress (%)',
                     data: courses.filter(c => enrolledCourses.includes(c.id)).map(c => c.progress),
                     backgroundColor: '#3f51b5',
-                    borderRadius: 5
+                    borderRadius: 5,
                 }
             ]
         };
         
         return { pieData, barData };
     };
-    
-    // Get recommended courses
-    const getRecommendedCourses = () => {
-        // In a real app, this would use more sophisticated recommendation logic
-        return courses.filter(course => course.recommended || course.progress === 0);
-    };
-    
+
     // Render dashboard section
     const renderDashboard = () => {
         const { pieData, barData } = prepareChartData();
         const enrolledCoursesData = courses.filter(course => enrolledCourses.includes(course.id));
+        const notEnrolledCoursesData = courses.filter(course => !enrolledCourses.includes(course.id));
         
         return (
             <div className="dashboard-content">
                 <h2 className="section-title">Learning Dashboard</h2>
                 
                 {/* Stats overview */}
-                <div className="stats-container">
-                    <div className="stat-card">
+                <div style={statsContainerStyle} className="stats-container">
+                    <div 
+                        style={statCardStyle} 
+                        className="stat-card"
+                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                    >
                         <h3>Enrolled Courses</h3>
-                        <p className="stat-value">{enrolledCourses.length}</p>
+                        <p style={statValueStyle} className="stat-value">{enrolledCourses.length}</p>
                     </div>
-                    <div className="stat-card">
+                    <div 
+                        style={statCardStyle} 
+                        className="stat-card"
+                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                    >
                         <h3>Completed Courses</h3>
-                        <p className="stat-value">{enrolledCoursesData.filter(c => c.progress === 100).length}</p>
+                        <p style={statValueStyle} className="stat-value">
+                            {courses.filter(c => enrolledCourses.includes(c.id) && c.progress === 100).length}
+                        </p>
                     </div>
-                    <div className="stat-card">
+                    <div 
+                        style={statCardStyle} 
+                        className="stat-card"
+                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                    >
                         <h3>Certificates Earned</h3>
-                        <p className="stat-value">{certificates.length}</p>
+                        <p style={statValueStyle} className="stat-value">{certificates.length}</p>
                     </div>
                 </div>
                 
@@ -413,53 +449,51 @@ const StudentDashboard = () => {
                             </div>
                         </div>
                         
-                        {/* Recent courses */}
-                        <div className="recent-courses">
-                            <h3>Continue Learning</h3>
+                        {/* Enrolled courses section */}
+                        <div className="enrolled-courses-section">
+                            <h3>My Enrolled Courses</h3>
                             <div className="courses-grid">
-                                {enrolledCoursesData.filter(course => course.progress > 0 && course.progress < 100)
-                                    .slice(0, 3)
-                                    .map(course => (
-                                        <div key={course.id} className="course-card">
-                                            <div className="course-image">
-                                                <img src={course.image} alt={course.title} />
+                                {enrolledCoursesData.map(course => (
+                                    <div key={course.id} className="course-card">
+                                        <div className="course-image">
+                                            <img src={course.image} alt={course.title} />
+                                        </div>
+                                        <div className="course-info">
+                                            <h4>{course.title}</h4>
+                                            <div className="progress-container">
+                                                <div className="progress-bar">
+                                                    <div className="progress-fill" style={{width: `${course.progress}%`}}></div>
+                                                </div>
+                                                <span className="progress-text">{course.progress}% complete</span>
                                             </div>
-                                            <div className="course-info">
-                                                <h4>{course.title}</h4>
-                                                <div className="progress-container">
-                                                    <div className="progress-bar">
-                                                        <div className="progress-fill" style={{width: `${course.progress}%`}}></div>
-                                                    </div>
-                                                    <span className="progress-text">{course.progress}% complete</span>
-                                                </div>
-                                                <div className="course-buttons">
-                                                    <button 
-                                                        className="continue-button"
-                                                        onClick={() => {
-                                                            setSelectedCourse(course);
-                                                            setActiveSection('course-detail');
-                                                        }}
-                                                    >
-                                                        Continue
-                                                    </button>
-                                                    <button 
-                                                        className="view-modules-button"
-                                                        onClick={() => setViewingModules(course)}
-                                                    >
-                                                        View Modules
-                                                    </button>
-                                                </div>
+                                            <div className="course-buttons">
+                                                <button 
+                                                    className="continue-button"
+                                                    onClick={() => {
+                                                        setSelectedCourse(course);
+                                                        setActiveSection('course-detail');
+                                                    }}
+                                                >
+                                                    Continue
+                                                </button>
+                                                <button 
+                                                    className="view-modules-button"
+                                                    onClick={() => setViewingModules(course)}
+                                                >
+                                                    View Modules
+                                                </button>
                                             </div>
                                         </div>
-                                    ))}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                         
-                        {/* Recommended courses */}
-                        <div className="recommended-courses">
-                            <h3>Recommended for You</h3>
+                        {/* Available courses not yet enrolled */}
+                        <div className="available-courses">
+                            <h3>Available Courses</h3>
                             <div className="courses-grid">
-                                {getRecommendedCourses().slice(0, 3).map(course => (
+                                {notEnrolledCoursesData.map(course => (
                                     <div key={course.id} className="course-card recommended">
                                         <div className="course-image">
                                             <img src={course.image} alt={course.title} />
@@ -477,13 +511,13 @@ const StudentDashboard = () => {
                                                         setActiveSection('course-detail');
                                                     }}
                                                 >
-                                                    {enrolledCourses.includes(course.id) ? 'Continue' : 'Enroll Now'}
+                                                    Enroll Now
                                                 </button>
                                                 <button 
                                                     className="view-modules-button"
                                                     onClick={() => setViewingModules(course)}
                                                 >
-                                                    View Modules
+                                                    Preview
                                                 </button>
                                             </div>
                                         </div>
@@ -496,7 +530,7 @@ const StudentDashboard = () => {
             </div>
         );
     };
-    
+
     // New function to render modules and videos for a selected course
     const renderModulesView = (course) => {
         if (!course || !course.modules) return null;
@@ -508,7 +542,6 @@ const StudentDashboard = () => {
                         &larr; Back to Dashboard
                     </button>
                 </div>
-                
                 <div className="course-header">
                     <div className="course-header-image">
                         <img src={course.image} alt={course.title} />
@@ -519,24 +552,49 @@ const StudentDashboard = () => {
                         <p className="instructor">Instructor: {course.instructor}</p>
                     </div>
                 </div>
-                
                 <div className="course-modules-list">
                     <h3>Course Modules and Videos</h3>
-                    
                     {course.modules.map(module => (
                         <div key={module.id} className="module-card expanded">
-                            <h4>{module.title}</h4>
+                            <div className="module-header">
+                                <h4>{module.title}</h4>
+                                {completedModules[`${course.id}-${module.id}`] && <span className="completed-badge">✓ Completed</span>}
+                            </div>
                             <p>{module.description}</p>
-                            
+                            <div className="module-resources">
+                                <h5>Learning Resources</h5>
+                                <ul className="resources-list">
+                                    {module.resources.map(resource => (
+                                        <li key={resource.id} className={`resource-item ${resource.type}`}>
+                                            {resource.type === 'pdf' && <i className="fas fa-file-pdf"></i>}
+                                            {resource.type === 'video' && <i className="fas fa-video"></i>}
+                                            {resource.type === 'document' && <i className="fas fa-file-alt"></i>}
+                                            <span>{resource.title}</span>
+                                            <button className="resource-button">View</button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            {module.quiz && (
+                                <div className="module-quiz">
+                                    <h5>Module Assessment</h5>
+                                    <button 
+                                        className="take-quiz-button"
+                                        onClick={() => startQuiz(course, module)}
+                                    >
+                                        {completedModules[`${course.id}-${module.id}`] ? 'Retake Quiz' : 'Take Quiz'}
+                                    </button>
+                                </div>
+                            )}
                             <div className="module-videos">
                                 <h5>Module Videos</h5>
                                 <div className="videos-container">
-                                    {module.videos && module.videos.map(video => (
+                                    {module.videos.map(video => (
                                         <div key={video.id} className="video-item">
                                             <div className="video-embed">
                                                 <iframe 
-                                                    src={video.url}
-                                                    title={video.title}
+                                                    src={video.url} 
+                                                    title={video.title} 
                                                     frameBorder="0"
                                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                     allowFullScreen
@@ -556,7 +614,7 @@ const StudentDashboard = () => {
             </div>
         );
     };
-    
+
     // Render courses section
     const renderCourses = () => {
         const enrolledCoursesData = courses.filter(course => enrolledCourses.includes(course.id));
@@ -564,7 +622,6 @@ const StudentDashboard = () => {
         return (
             <div className="courses-content">
                 <h2 className="section-title">My Courses</h2>
-                
                 <div className="courses-grid full-width">
                     {enrolledCoursesData.map(course => (
                         <div key={course.id} className="course-card detailed">
@@ -575,14 +632,12 @@ const StudentDashboard = () => {
                                 <h3>{course.title}</h3>
                                 <p>{course.description}</p>
                                 <p className="instructor">Instructor: {course.instructor}</p>
-                                
                                 <div className="progress-container">
                                     <div className="progress-bar">
                                         <div className="progress-fill" style={{width: `${course.progress}%`}}></div>
                                     </div>
                                     <span className="progress-text">{course.progress}% complete</span>
                                 </div>
-                                
                                 <button 
                                     className="view-course-button"
                                     onClick={() => {
@@ -599,7 +654,7 @@ const StudentDashboard = () => {
             </div>
         );
     };
-    
+
     // Render course detail with resources and modules
     const renderCourseDetail = () => {
         if (!selectedCourse) return null;
@@ -611,7 +666,6 @@ const StudentDashboard = () => {
                         &larr; Back to Courses
                     </button>
                 </div>
-                
                 <div className="course-header">
                     <div className="course-header-image">
                         <img src={selectedCourse.image} alt={selectedCourse.title} />
@@ -620,38 +674,29 @@ const StudentDashboard = () => {
                         <h2>{selectedCourse.title}</h2>
                         <p>{selectedCourse.description}</p>
                         <p className="instructor">Instructor: {selectedCourse.instructor}</p>
-                        
-                        <div className="progress-container large">
-                            <div className="progress-bar">
-                                <div className="progress-fill" style={{width: `${selectedCourse.progress}%`}}></div>
-                            </div>
-                            <span className="progress-text">{selectedCourse.progress}% complete</span>
-                        </div>
                     </div>
                 </div>
-                
+                <div className="progress-container large">
+                    <div className="progress-bar">
+                        <div className="progress-fill" style={{width: `${selectedCourse.progress}%`}}></div>
+                    </div>
+                    <span className="progress-text">{selectedCourse.progress}% complete</span>
+                </div>
                 <div className="course-modules">
                     <h3>Course Modules</h3>
-                    
-                    {selectedCourse.modules?.map(module => {
+                    {selectedCourse.modules.map(module => {
                         const isCompleted = completedModules[`${selectedCourse.id}-${module.id}`];
-                        
                         return (
-                            <div 
-                                key={module.id} 
-                                className={`module-card ${isCompleted ? 'completed' : ''}`}
-                            >
+                            <div key={module.id} className={`module-card ${isCompleted ? 'completed' : ''}`}>
                                 <div className="module-header">
                                     <h4>{module.title}</h4>
                                     {isCompleted && <span className="completed-badge">✓ Completed</span>}
                                 </div>
-                                
                                 <p>{module.description}</p>
-                                
                                 <div className="module-resources">
                                     <h5>Learning Resources</h5>
                                     <ul className="resources-list">
-                                        {module.resources?.map(resource => (
+                                        {module.resources.map(resource => (
                                             <li key={resource.id} className={`resource-item ${resource.type}`}>
                                                 {resource.type === 'pdf' && <i className="fas fa-file-pdf"></i>}
                                                 {resource.type === 'video' && <i className="fas fa-video"></i>}
@@ -662,7 +707,6 @@ const StudentDashboard = () => {
                                         ))}
                                     </ul>
                                 </div>
-                                
                                 {module.quiz && (
                                     <div className="module-quiz">
                                         <h5>Module Assessment</h5>
@@ -681,7 +725,7 @@ const StudentDashboard = () => {
             </div>
         );
     };
-    
+
     // Render quiz section
     const renderQuiz = () => {
         if (!currentQuiz) return null;
@@ -693,9 +737,7 @@ const StudentDashboard = () => {
                         &larr; Back to Course
                     </button>
                 </div>
-                
                 <h2>{currentQuiz.title}</h2>
-                
                 {!quizResult ? (
                     <>
                         <div className="quiz-questions">
@@ -718,7 +760,6 @@ const StudentDashboard = () => {
                                 </div>
                             ))}
                         </div>
-                        
                         <button 
                             className="submit-quiz-button"
                             onClick={handleQuizSubmit}
@@ -736,7 +777,6 @@ const StudentDashboard = () => {
                             </div>
                             <p>You answered {quizResult.correct} out of {quizResult.total} questions correctly.</p>
                         </div>
-                        
                         {quizResult.passed ? (
                             <div className="success-message">
                                 <h4>Congratulations! You passed the quiz.</h4>
@@ -748,7 +788,6 @@ const StudentDashboard = () => {
                                 <p>Review the module content and try again.</p>
                             </div>
                         )}
-                        
                         <div className="result-actions">
                             <button 
                                 className="retry-button"
@@ -771,13 +810,12 @@ const StudentDashboard = () => {
             </div>
         );
     };
-    
+
     // Render certificates section
     const renderCertificates = () => {
         return (
             <div className="certificates-content">
                 <h2 className="section-title">My Certificates</h2>
-                
                 {certificates.length === 0 ? (
                     <div className="no-certificates">
                         <p>You haven't earned any certificates yet. Complete a course to earn your first certificate!</p>
@@ -809,7 +847,7 @@ const StudentDashboard = () => {
             </div>
         );
     };
-    
+
     // Render resources section
     const renderResources = () => {
         // Group resources by course
@@ -880,7 +918,6 @@ const StudentDashboard = () => {
         );
     };
 
-    // Main render method
     return (
         <div className="dashboard-container">
             {/* Navigation Bar */}
@@ -890,6 +927,27 @@ const StudentDashboard = () => {
                     <span className="user-name">Welcome, {username}</span>
                     <img className="avatar" src={`https://ui-avatars.com/api/?name=${username}&background=random`} alt="Profile" />
                 </div>
+                <button 
+                    className="logout-button"
+                    onClick={() => {
+                        localStorage.removeItem('user');
+                        window.location.href = '/';
+                    }}
+                    style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#dc3545',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        marginLeft: '15px',
+                        transition: 'background-color 0.3s'
+                    }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = '#c82333'}
+                    onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
+                >
+                    Logout
+                </button>
             </nav>
             
             {/* Main Dashboard Layout */}
@@ -912,18 +970,18 @@ const StudentDashboard = () => {
                             <span>My Courses</span>
                         </li>
                         <li 
-                            className={`menu-item ${activeSection === 'resources' ? 'active' : ''}`}
-                            onClick={() => setActiveSection('resources')}
-                        >
-                            <i className="fas fa-file-alt"></i>
-                            <span>Resources</span>
-                        </li>
-                        <li 
                             className={`menu-item ${activeSection === 'certificates' ? 'active' : ''}`}
                             onClick={() => setActiveSection('certificates')}
                         >
                             <i className="fas fa-certificate"></i>
                             <span>Certificates</span>
+                        </li>
+                        <li 
+                            className={`menu-item ${activeSection === 'resources' ? 'active' : ''}`}
+                            onClick={() => setActiveSection('resources')}
+                        >
+                            <i className="fas fa-file-alt"></i>
+                            <span>Resources</span>
                         </li>
                     </ul>
                 </aside>

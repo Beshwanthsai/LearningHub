@@ -17,7 +17,6 @@
   --category-5: #f97316;
   --featured-gradient: linear-gradient(135deg, #ff9a9e, #fad0c4);
 }
-
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--bg-color);

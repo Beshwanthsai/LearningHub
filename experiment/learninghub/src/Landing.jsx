@@ -158,8 +158,8 @@ const Landing = () => {
                     </div>
                     <div className="footer-section">
                         <h4>Contact Us</h4>
-                        <p>Email: info@learninghub.com</p>
-                        <p>Phone: (123) 456-7890</p>
+                        <p>Email: learninghubfsad@gmail.com</p>
+                        <p>Phone: (+91) 9491578736</p>
                     </div>
                     <div className="footer-section">
                         <h4>Follow Us</h4>
@@ -172,7 +172,7 @@ const Landing = () => {
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <p>&copy; 2024 Learning Hub. All rights reserved.</p>
+                    <p>&copy; 2025 Learning Hub. All rights reserved.</p>
                 </div>
             </footer>
         </div>

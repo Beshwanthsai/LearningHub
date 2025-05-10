@@ -77,12 +77,25 @@ export default function Login({ setIsAuthenticated }) {
             { headers: { "Content-Type": "application/json" } }
         )
         .then((response) => {
+            console.log("Login response:", response.data);
+            
             if (response.data.auth) {
                 setIsAuthenticated(true);
-                // Store user data after successful login
-                localStorage.setItem('user', JSON.stringify({ username: username }));
                 
-                toast.success('Login successful!', {
+                // Convert role to number if it's a string
+                const userRole = typeof response.data.role === 'string' 
+                    ? parseInt(response.data.role, 10) 
+                    : response.data.role;
+                
+                console.log("User role:", userRole);
+                
+                // Store user data after successful login
+                localStorage.setItem('user', JSON.stringify({ 
+                    username: username,
+                    role: userRole
+                }));
+                
+                toast.success('Login successful! Redirecting...', {
                     position: "top-right",
                     theme: "colored",
                     style: {
@@ -91,13 +104,20 @@ export default function Login({ setIsAuthenticated }) {
                     }
                 });
 
-                setTimeout(() => {
-                    if (response.data.role === 1) {
-                        navigate('/student-dashboard');
-                    } else if (response.data.role === 2) {
-                        navigate('/instructor-dashboard');
-                    }
-                }, 1500);
+                // Direct navigation without timeout
+                if (userRole === 1) {
+                    console.log("Navigating to student dashboard");
+                    navigate('/student-dashboard', { replace: true });
+                } else if (userRole === 2) {
+                    console.log("Navigating to instructor dashboard");
+                    navigate('/instructor-dashboard', { replace: true });
+                } else {
+                    console.error("Unknown role:", userRole);
+                    toast.error(`Role not recognized: ${userRole}`, {
+                        position: "top-right",
+                        theme: "colored"
+                    });
+                }
             } else {
                 toast.error('Invalid credentials', {
                     position: "top-right",
@@ -106,6 +126,7 @@ export default function Login({ setIsAuthenticated }) {
             }
         })
         .catch((error) => {
+            console.error("Login error:", error);
             toast.error('Login failed', {
                 position: "top-right",
                 theme: "colored"
