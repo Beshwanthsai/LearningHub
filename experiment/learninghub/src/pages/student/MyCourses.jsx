@@ -24,7 +24,7 @@ const RegisteredCoursesViewer = () => {
         console.log('Fetching courses for username:', username);
         
 
-        const response = await fetch(`http://localhost:8083/registered-courses?username=${username}`);
+        const response = await fetch(`http://3.110.27.188:8083/registered-courses?username=${username}`);
         if (!response.ok) throw new Error('Failed to fetch registered courses');
         let data = await response.json();
         console.log('API response data:', data);
@@ -34,7 +34,7 @@ const RegisteredCoursesViewer = () => {
         if (!hasAllCourseIds) {
           try {
 
-            const allCoursesResponse = await fetch('http://localhost:8083/all-courses');
+            const allCoursesResponse = await fetch('http://3.110.27.188:8083/all-courses');
             if (allCoursesResponse.ok) {
               const allCourses = await allCoursesResponse.json();
               console.log('All courses data:', allCourses);
@@ -141,14 +141,15 @@ const RegisteredCoursesViewer = () => {
       <style jsx>{`
         .styled-section {
           padding: 30px;
-          background: linear-gradient(135deg, rgba(106, 193, 197, 0.05), rgba(189, 165, 255, 0.05));
+          color:white;
+          background:white ;
           border-radius: 12px;
           margin: 20px;
         }
 
         .styled-title {
           font-size: 28px;
-          color: #2c3e50;
+          color:rgb(33, 118, 203);
           margin-bottom: 25px;
           text-align: center;
           border-bottom: 2px solid #6ac1c5;

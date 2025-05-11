@@ -23,7 +23,7 @@ const InstructorDashboard = () => {
 
   const fetchUploadedCourses = async (username) => {
     try {
-      const response = await axios.get(`http://localhost:8083/courses?username=${username}`);
+      const response = await axios.get(`http://3.110.27.188:8083/courses?username=${username}`);
       setUploadedCourses(response.data);
     } catch (error) {
       console.error('Error fetching uploaded courses:', error);

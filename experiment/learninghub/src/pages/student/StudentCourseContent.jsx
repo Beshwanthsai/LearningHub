@@ -28,7 +28,7 @@ const StudentCourseContent = () => {
           throw new Error('Course ID is missing.');
         }
 
-        const response = await fetch(`http://localhost:8083/student-course-content?username=${username}&courseId=${courseId}`);
+        const response = await fetch(`http://3.110.27.188:8083/student-course-content?username=${username}&courseId=${courseId}`);
         if (!response.ok) throw new Error('Failed to fetch content');
         const data = await response.json();
         setContents(data);

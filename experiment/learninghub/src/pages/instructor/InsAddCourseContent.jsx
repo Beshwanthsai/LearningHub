@@ -21,7 +21,7 @@ const AddCourseContent = () => {
     };
 
     axios
-      .post("http://localhost:8083/course-content", newContent) // Adjust the URL based on your backend URL
+      .post("http://3.110.27.188:8083/course-content", newContent) // Adjust the URL based on your backend URL
       .then((response) => {
         setMessage("Course content added successfully!");
         // Clear the form fields

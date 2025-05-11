@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './InsAddCourse.css';
+import './InsAddCourse.css'; // Updated import to match CSS file name
 
 const AddCourse = () => {
   const [courseId, setCourseId] = useState('');
@@ -11,6 +11,7 @@ const AddCourse = () => {
   const [time, setTime] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); // For success/error styling
 
   useEffect(() => {
     // Fetch username from localStorage
@@ -25,19 +26,21 @@ const AddCourse = () => {
     e.preventDefault();
     setIsLoading(true);
     setMessage('');
+    setMessageType('');
 
     try {
       const payload = {
         username,
-        courseid: courseId,
+        coursed: courseId,
         title,
         description,
         time: parseInt(time),
       };
 
-      const response = await axios.post('http://localhost:8083/courses', payload);
+      const response = await axios.post('http://3.110.27.188:8083/courses', payload);
       console.log(response.data);
       setMessage('Course added successfully!');
+      setMessageType('success');
       setCourseId('');
       setTitle('');
       setDescription('');
@@ -45,81 +48,146 @@ const AddCourse = () => {
     } catch (error) {
       console.error('Error adding course:', error);
       setMessage('Failed to add course. Please try again.');
+      setMessageType('error');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <nav className="instructor-navbar styled-navbar">
-        <Link to="/" className="navbar-logo styled-logo">Learning<span>Hub</span></Link>
-        <div className="navbar-nav styled-nav">
-          <Link to="/instructor-dashboard" className="nav-item styled-nav-item">Dashboard</Link>
-          <Link to="/InsAddCourse" className="nav-item active styled-nav-item">Add Courses</Link>
-          <Link to="/InsAddCourseContent" className="nav-item styled-nav-item">Course Content</Link>
+    <div className="no-scroll-container">
+      <nav className="instructor-navbar">
+        <Link to="/" className="navbar-logo">Learning<span>Hub</span></Link>
+        <div className="navbar-nav">
+          <Link to="/instructor-dashboard" className="nav-item">Dashboard</Link>
+          <Link to="/InsAddCourse" className="nav-item active">Add Courses</Link>
+          <Link to="/InsAddCourseContent" className="nav-item">Course Content</Link>
         </div>
       </nav>
 
-      <div className="add-course-container styled-container">
-        <h2 className="styled-title">Add Course</h2>
-        <form onSubmit={handleSubmit} className="styled-form">
-          <div className="styled-input-group">
-            <label htmlFor="courseId">Course ID:</label>
-            <input
-              type="text"
-              id="courseId"
-              value={courseId}
-              onChange={(e) => setCourseId(e.target.value)}
-              required
-            />
+      <div className="dashboard-container fixed-height">
+        <div className="add-course-container compact-container">
+          <div className="form-container">
+            <div className="form-header">
+              <h2 className="styled-title">Add New Course</h2>
+              <p className="form-subtext">Fill in the details below to create a new course</p>
+            </div>
+            
+            {messageType && (
+              <div className={`${messageType}-message`}>
+                {message}
+              </div>
+            )}
+            
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="courseId" className="required">Course ID</label>
+                <input
+                  type="text"
+                  id="courseId"
+                  value={courseId}
+                  onChange={(e) => setCourseId(e.target.value)}
+                  placeholder="Enter a unique course identifier"
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="username">Instructor Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  value={username}
+                  readOnly
+                  className="readonly"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="title" className="required">Course Title</label>
+                <input
+                  type="text"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter an engaging course title"
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="description" className="required">Course Description</label>
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Provide a detailed description of the course"
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="time" className="required">Course Duration (in hours)</label>
+                <input
+                  type="number"
+                  id="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  placeholder="Estimated time to complete the course"
+                  required
+                  min="0"
+                  step="1"
+                />
+              </div>
+              
+              <div className="form-actions">
+                <button type="button" className="btn-secondary" onClick={() => window.history.back()}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn-primary" disabled={isLoading}>
+                  {isLoading ? 'Adding Course...' : 'Add Course'}
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="styled-input-group">
-            <label htmlFor="username">Username:</label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              readOnly
-            />
-          </div>
-          <div className="styled-input-group">
-            <label htmlFor="title">Title:</label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div className="styled-input-group">
-            <label htmlFor="description">Description:</label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-          <div className="styled-input-group">
-            <label htmlFor="time">Time (in hours):</label>
-            <input
-              type="number"
-              id="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="styled-button" disabled={isLoading}>
-            {isLoading ? 'Adding Course...' : 'Add Course'}
-          </button>
-        </form>
-
-        {message && <p className="styled-message">{message}</p>}
+        </div>
       </div>
-    </>
+      
+      {/* Add inline styles to prevent scrolling */}
+      <style jsx>{`
+        .no-scroll-container {
+          height: 100vh;
+          overflow: hidden;
+        }
+        
+        .fixed-height {
+          height: calc(100vh - 61px); /* Subtract navbar height */
+          overflow-y: auto;
+          padding-bottom: 0;
+        }
+        
+        .compact-container {
+          margin: 0 auto;
+          padding: 20px;
+          max-height: 100%;
+        }
+        
+        .form-container {
+          max-height: calc(100vh - 150px);
+          overflow-y: auto;
+          padding-right: 10px; /* Add some padding for the scrollbar */
+        }
+        
+        /* Make form elements more compact */
+        .form-group {
+          margin-bottom: 15px;
+        }
+        
+        .form-group textarea {
+          min-height: 80px;
+        }
+      `}</style>
+    </div>
   );
 };
 
