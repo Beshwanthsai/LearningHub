@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login({ setIsAuthenticated }) {
     const navigate = useNavigate();
+    const backendUrl = window.env.BACKEND_URL; // Use env-config.js
 
     function register() {
         let username = document.getElementById("un").value;
@@ -27,13 +28,12 @@ export default function Login({ setIsAuthenticated }) {
 
         role = parseInt(role, 10);
 
-        axios.post("http://3.87.77.146:8083/register", 
+        axios.post(`${backendUrl}/register`, 
             { username, email, password, role }, 
             { headers: { "Content-Type": "application/json" } }
         )
         .then((res) => {
-            
-            localStorage.setItem('user', JSON.stringify({ username: username }));
+            localStorage.setItem('user', JSON.stringify({ username }));
             toast.success('Registration successful!', {
                 position: "top-right",
                 theme: "colored",
@@ -72,29 +72,23 @@ export default function Login({ setIsAuthenticated }) {
             return;
         }
 
-        axios.post("http://3.87.77.146:8083/verifyUser", 
+        axios.post(`${backendUrl}/verifyUser`, 
             { username, password },
             { headers: { "Content-Type": "application/json" } }
         )
         .then((response) => {
-            console.log("Login response:", response.data);
-            
             if (response.data.auth) {
                 setIsAuthenticated(true);
-                
-                // Convert role to number if it's a string
+
                 const userRole = typeof response.data.role === 'string' 
                     ? parseInt(response.data.role, 10) 
                     : response.data.role;
-                
-                console.log("User role:", userRole);
-                
-                // Store user data after successful login
+
                 localStorage.setItem('user', JSON.stringify({ 
-                    username: username,
+                    username,
                     role: userRole
                 }));
-                
+
                 toast.success('Login successful! Redirecting...', {
                     position: "top-right",
                     theme: "colored",
@@ -104,15 +98,11 @@ export default function Login({ setIsAuthenticated }) {
                     }
                 });
 
-                // Direct navigation without timeout
                 if (userRole === 1) {
-                    console.log("Navigating to student dashboard");
                     navigate('/student-dashboard', { replace: true });
                 } else if (userRole === 2) {
-                    console.log("Navigating to instructor dashboard");
                     navigate('/instructor-dashboard', { replace: true });
                 } else {
-                    console.error("Unknown role:", userRole);
                     toast.error(`Role not recognized: ${userRole}`, {
                         position: "top-right",
                         theme: "colored"
@@ -126,7 +116,6 @@ export default function Login({ setIsAuthenticated }) {
             }
         })
         .catch((error) => {
-            console.error("Login error:", error);
             toast.error('Login failed', {
                 position: "top-right",
                 theme: "colored"
