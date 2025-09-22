@@ -27,7 +27,7 @@ export default function Login({ setIsAuthenticated }) {
 
         role = parseInt(role, 10);
 
-        axios.post("http://3.95.215.66:8083/register", 
+        axios.post("http://54.158.11.160:8083/register", 
             { username, email, password, role }, 
             { headers: { "Content-Type": "application/json" } }
         )
@@ -72,7 +72,7 @@ export default function Login({ setIsAuthenticated }) {
             return;
         }
 
-        axios.post("http://3.95.215.66:8083/verifyUser", 
+        axios.post("http://54.158.11.160:8083/verifyUser", 
             { username, password },
             { headers: { "Content-Type": "application/json" } }
         )
