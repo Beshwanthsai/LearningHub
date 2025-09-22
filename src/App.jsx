@@ -5,21 +5,19 @@ import Login from './authenticationpages/login';
 import StudentDashboard from './pages/student/StudentDashboard';
 import InstructorDashboard from './pages/instructor/InstructorDashboard';
 import ForgotPassword from './authenticationpages/ForgotPassword';
-// Import the new pages
 import InsAddCourse from './pages/instructor/InsAddCourse';
 import InsAddCourseContent from './pages/instructor/InsAddCourseContent';
 import StudentCourseContent from './pages/student/StudentCourseContent';
 
+const ProtectedRoute = ({ isAuthenticated, children }) => {
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+    return children;
+};
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    const ProtectedRoute = ({ children }) => {
-        if (!isAuthenticated) {
-            return <Navigate to="/login" />;
-        }
-        return children;
-    };
 
     return (
         <Router>
@@ -28,19 +26,20 @@ function App() {
                 <Route path="/" element={<Landing />} />
                 <Route 
                     path="/login" 
-                    element={<Login setIsAuthenticated={setIsAuthenticated} />} 
+                    element={
+                        isAuthenticated 
+                        ? <Navigate to="/student-dashboard" /> 
+                        : <Login setIsAuthenticated={setIsAuthenticated} />
+                    } 
                 />
                 <Route path="/course-content-view" element={<StudentCourseContent />} />
-                <Route 
-                    path="/forgot-password" 
-                    element={<ForgotPassword />} 
-                />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
 
                 {/* Protected Routes */}
                 <Route 
                     path="/student-dashboard" 
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
                             <StudentDashboard />
                         </ProtectedRoute>
                     } 
@@ -48,24 +47,24 @@ function App() {
                 <Route 
                     path="/instructor-dashboard" 
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
                             <InstructorDashboard />
                         </ProtectedRoute>
                     } 
                 />
                 {/* New Instructor Routes */}
                 <Route 
-                    path="/InsAddCourse" 
+                    path="/instructor/add-course" 
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
                             <InsAddCourse />
                         </ProtectedRoute>
                     } 
                 />
                 <Route 
-                    path="/InsAddCourseContent" 
+                    path="/instructor/add-course-content" 
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
                             <InsAddCourseContent />
                         </ProtectedRoute>
                     } 
