@@ -21,7 +21,7 @@ export default function ForgotPassword() {
             return;
         }
 
-        axios.post("http://54.82.203.74/forgot-password", { username })
+        axios.post("http://34.207.251.218/forgot-password", { username })
             .then(response => {
                 toast.success('Password reset instructions sent!', {
                     position: "top-right",
