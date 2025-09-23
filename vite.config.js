@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/learninghub-frontend/'  // For Tomcat deployment
+  base: '/'  // For Tomcat deployment
 })
